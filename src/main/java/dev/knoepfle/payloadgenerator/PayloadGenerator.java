@@ -54,7 +54,7 @@ class PayloadGenerator {
 
     public PayloadGenerator() {
         this.payload = new StringBuilder();
-        this.randomGenerator = new SplittableRandom();
+        this.randomGenerator = new SplittableRandom(1L);
         this.counter = 0;
     }
 
