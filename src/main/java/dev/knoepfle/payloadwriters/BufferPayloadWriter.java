@@ -1,11 +1,10 @@
 package dev.knoepfle.payloadwriters;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-public class BufferPayloadWriter implements PayloadWriter<BufferPayloadWriter> {
+public class BufferPayloadWriter implements PayloadWriter {
 
     Iterator<String> stream;
     int messageCount;
@@ -19,21 +18,16 @@ public class BufferPayloadWriter implements PayloadWriter<BufferPayloadWriter> {
     }
 
     @Override
-    public BufferPayloadWriter write() {
+    public void write() {
+        buffer.reset();
         for (int i = 0; i < messageCount; i++) {
             byte[] bytes = stream.next().getBytes();
             buffer.write(bytes, 0, bytes.length);
         }
-        return this;
     }
 
     public byte[] getBuffer() {
         return buffer.toByteArray();
-    }
-
-    public BufferPayloadWriter resetBuffer() {
-        buffer.reset();
-        return this;
     }
 
     protected ByteArrayOutputStream getBufferStream() {

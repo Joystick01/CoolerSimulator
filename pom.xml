@@ -15,4 +15,12 @@
         <exec.mainClass>dev.knoepfle.Main</exec.mainClass>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-file-datalake</artifactId>
+            <version>12.22.0</version>
+        </dependency>
+    </dependencies>
+
 </project>

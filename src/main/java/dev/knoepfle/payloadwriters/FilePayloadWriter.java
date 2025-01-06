@@ -1,43 +1,42 @@
 package dev.knoepfle.payloadwriters;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class FilePayloadWriter implements PayloadWriter<FilePayloadWriter> {
+public class FilePayloadWriter implements PayloadWriter {
 
     BufferPayloadWriter bufferPayloadWriter;
     int fileMessageCount;
-    int messageCount;
+    int fileCount;
+    Path path;
 
-    public FilePayloadWriter(Stream<String> stream, int fileMessageCount, int messageCount, Path path) {
+    public FilePayloadWriter(Stream<String> stream, int fileMessageCount, int fileCount, Path path) {
 
         this.bufferPayloadWriter = new BufferPayloadWriter(stream, fileMessageCount);
         this.fileMessageCount = fileMessageCount;
-        this.messageCount = messageCount;
-
+        this.fileCount = fileCount;
+        this.path = path;
     }
 
     @Override
-    public FilePayloadWriter write() throws IOException {
+    public void write() throws IOException {
 
-        int numberOfFiles = (int) Math.ceil((double) messageCount / fileMessageCount);
         File file;
         FileOutputStream fileOutputStream;
+        int padding = (int) (Math.log10(fileCount) + 1);
+        Files.createDirectories(path);
 
-        for (int i = 0; i < numberOfFiles; i++) {
-            file = new File(i + ".json");
+        for (int i = 0; i < fileCount; i++) {
+            file = new File(path.resolve(String.format("%0" + padding + "d.json", i)).toString());
             fileOutputStream = new FileOutputStream(file);
 
             bufferPayloadWriter.write();
             fileOutputStream.write(bufferPayloadWriter.getBuffer());
             fileOutputStream.close();
-            bufferPayloadWriter.resetBuffer();
         }
-
-        return this;
     }
 }
