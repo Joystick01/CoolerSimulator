@@ -1,6 +1,7 @@
 package dev.knoepfle;
 
 import dev.knoepfle.payloadgenerator.PayloadGeneratorStreamFactory;
+import dev.knoepfle.payloadwriters.KafkaPayloadWriter;
 import dev.knoepfle.payloadwriters.PayloadWriter;
 import dev.knoepfle.payloadwriters.PayloadWriterFactory;
 

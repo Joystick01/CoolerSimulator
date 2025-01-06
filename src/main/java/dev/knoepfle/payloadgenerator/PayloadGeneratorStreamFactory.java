@@ -15,6 +15,10 @@ public class PayloadGeneratorStreamFactory {
     }
 
     public Stream<String> generateStream() {
+        return Stream.generate(() -> payloadGenerator.generate()[1]);
+    }
+
+    public Stream<String[]> generateKVStream() {
         return Stream.generate(() -> payloadGenerator.generate());
     }
 }

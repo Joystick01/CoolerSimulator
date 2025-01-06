@@ -63,6 +63,23 @@ public class PayloadWriterFactory {
                         Integer.parseInt(System.getenv("DATALAKE_PAYLOAD_WRITER_FILE_MESSAGE_COUNT")),
                         Integer.parseInt(System.getenv("DATALAKE_PAYLOAD_WRITER_FILE_COUNT"))
                 );
+            case "KAFKA":
+                if (System.getenv("KAFKA_PAYLOAD_WRITER_TOPIC") == null) {
+                    throw new IllegalArgumentException("Kafka payload writer topic not set");
+                } else if(System.getenv("KAFKA_PAYLOAD_WRITER_BOOTSTRAP_SERVERS") == null) {
+                    throw new IllegalArgumentException("Kafka payload writer bootstrap servers not set");
+                } else if(System.getenv("KAFKA_PAYLOAD_WRITER_FLOOD_MESSAGES") == null) {
+                    throw new IllegalArgumentException("Kafka payload writer flood messages not set");
+                } else if(System.getenv("KAFKA_PAYLOAD_WRITER_SEND_RATE") == null) {
+                    throw new IllegalArgumentException("Kafka payload writer send rate not set");
+                }
+                return new KafkaPayloadWriter(
+                        payloadGeneratorStreamFactory.generateKVStream(),
+                        Integer.parseInt(System.getenv("KAFKA_PAYLOAD_WRITER_FLOOD_MESSAGES")),
+                        Integer.parseInt(System.getenv("KAFKA_PAYLOAD_WRITER_SEND_RATE")),
+                        System.getenv("KAFKA_PAYLOAD_WRITER_TOPIC"),
+                        System.getenv("KAFKA_PAYLOAD_WRITER_BOOTSTRAP_SERVERS")
+                );
             default:
                 throw new IllegalArgumentException("Invalid payload writer type");
         }

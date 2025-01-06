@@ -58,7 +58,7 @@ class PayloadGenerator {
         this.counter = offset;
     }
 
-    public String generate() {
+    public String[] generate() {
         payload.setLength(0);
         random = randomGenerator.nextInt() & Integer.MAX_VALUE;
         if (random % errorRate != 17) {
@@ -73,11 +73,11 @@ class PayloadGenerator {
         hour2 = ((counter + 300000) % 7200000) / 300000;
         day3 = day2 + 1;
 
+        String id = "89011702272048" + (random % 300000 + 100000);
 
 
-
-        payload.append("{\"cng_deviceId\":\"89011702272048");
-        payload.append(random % 300000 + 100000);
+        payload.append("{\"cng_deviceId\":\"");
+        payload.append(id);
 
         payload.append("\",\"timestamp\":\"");
         payload.append("2020-01-");
@@ -297,7 +297,7 @@ class PayloadGenerator {
 
         payload.append("\"}");
 
-        return payload.toString();
+        return new String[]{id, payload.toString()};
     }
 
 }
