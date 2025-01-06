@@ -29,6 +29,7 @@ public class DataLakePayloadWriter implements PayloadWriter {
     public void write() {
         int padding = (int) (Math.log10(fileCount) + 1);
         for (int i = 0; i < fileCount; i++) {
+            System.out.println("Uploading file " + i + " / " + fileCount);
             dataLakeFileClient = dataLakeFileSystemClient.getFileClient(String.format("%0" + padding + "d.json", i));
             bufferPayloadWriter.write();
             dataLakeFileClient.upload(BinaryData.fromBytes(bufferPayloadWriter.getBuffer()));

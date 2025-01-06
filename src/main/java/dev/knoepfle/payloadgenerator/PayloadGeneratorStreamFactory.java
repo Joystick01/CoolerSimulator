@@ -4,10 +4,17 @@ import java.util.stream.Stream;
 
 public class PayloadGeneratorStreamFactory {
 
-        PayloadGenerator payloadGenerator = new PayloadGenerator();
+    PayloadGenerator payloadGenerator;
 
+    public PayloadGeneratorStreamFactory() {
+        payloadGenerator = new PayloadGenerator(0);
+    }
 
-        public Stream<String> generateStream() {
-            return Stream.generate(() -> payloadGenerator.generate());
-        }
+    public PayloadGeneratorStreamFactory(int offset) {
+        payloadGenerator = new PayloadGenerator(offset);
+    }
+
+    public Stream<String> generateStream() {
+        return Stream.generate(() -> payloadGenerator.generate());
+    }
 }

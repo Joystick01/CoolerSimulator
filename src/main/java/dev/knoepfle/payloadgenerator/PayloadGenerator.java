@@ -52,16 +52,19 @@ class PayloadGenerator {
     int hour2;
     int day3;
 
-    public PayloadGenerator() {
+    public PayloadGenerator(int offset) {
         this.payload = new StringBuilder();
         this.randomGenerator = new SplittableRandom(1L);
-        this.counter = 0;
+        this.counter = offset;
     }
 
     public String generate() {
         payload.setLength(0);
         random = randomGenerator.nextInt() & Integer.MAX_VALUE;
-        ++counter;
+        if (random % errorRate != 17) {
+            counter++;
+        }
+
         day1 = counter / 7200000;
         hour1 = (counter % 7200000) / 300000;
         minute1 = (counter % 300000) / 5000;
