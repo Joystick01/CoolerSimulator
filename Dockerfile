@@ -6,7 +6,8 @@ COPY . .
 RUN mvn clean package
 
 FROM eclipse-temurin:23-jre as runtime
+LABEL org.opencontainers.image.source=https://github.com/Joystick01/CoolerSimulator
 
 WORKDIR /app
-COPY --from=build /build/target/*.jar app.jar
+COPY --from=build /build/target/*with-dependencies.jar app.jar
 CMD ["java", "-jar", "app.jar"]
