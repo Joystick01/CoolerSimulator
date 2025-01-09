@@ -1,10 +1,15 @@
 package dev.knoepfle.payloadgenerator;
 
+import dev.knoepfle.ConfigurationManager;
+
 import java.util.SplittableRandom;
 
 class PayloadGenerator {
 
-    final int errorRate = 1000;
+    private final ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+
+    final int errorRate = configurationManager.getInt("ERROR_RATE");
+    final int duplicateRate = configurationManager.getInt("DUPLICATE_RATE");
 
     private final String[] firmwareVersions = {
         "M12QW_v07.03.164641-D52A1_v.0.171060",
@@ -56,20 +61,24 @@ class PayloadGenerator {
         this.payload = new StringBuilder();
         this.randomGenerator = new SplittableRandom(1L);
         this.counter = offset;
+        this.random = randomGenerator.nextInt() & Integer.MAX_VALUE;
     }
 
     public String[] generate() {
         payload.setLength(0);
+        int oldRandom = random;
         random = randomGenerator.nextInt() & Integer.MAX_VALUE;
-        if (random % errorRate != 17) {
+        if (duplicateRate % 4 == 0) {
+            random = oldRandom;
+        } else {
             counter++;
         }
 
-        day1 = counter / 7200000;
+        day1 = (counter / 7200000) + 1;
         hour1 = (counter % 7200000) / 300000;
         minute1 = (counter % 300000) / 5000;
         second1 = (counter % 5000) / 83;
-        day2 = (counter + 300000) / 7200000;
+        day2 = ((counter + 300000) / 7200000) + 1;
         hour2 = ((counter + 300000) % 7200000) / 300000;
         day3 = day2 + 1;
 
@@ -135,14 +144,16 @@ class PayloadGenerator {
         payload.append("T00:00:03+00:00");
 
 
-        payload.append("\",\"firmwareVersion\":\"");
+        payload.append("\",\"firmwareVersion\":");
         if (random % errorRate == 0) {
             payload.append("null");
         } else {
+        payload.append('"');
         payload.append(firmwareVersions[random % firmwareVersionsLength]);
+        payload.append('"');
         }
 
-        payload.append("\",\"temperature\":");
+        payload.append(",\"temperature\":");
         if (random % errorRate == 1) {
             if(random % 4 == 0) {
                 payload.append("null");
@@ -221,14 +232,16 @@ class PayloadGenerator {
             payload.append(random % 1000001);
         }
 
-        payload.append(",\"locationType\":\"");
+        payload.append(",\"locationType\":");
         if (random % errorRate == 8) {
             payload.append("null");
         } else {
-        payload.append(locationTypes[random % locationTypesLength]);
+            payload.append('"');
+            payload.append(locationTypes[random % locationTypesLength]);
+            payload.append('"');
         }
 
-        payload.append("\",\"locationConfidence\":");
+        payload.append(",\"locationConfidence\":");
         if (random % errorRate == 9) {
             payload.append("null");
         } else {
@@ -242,22 +255,26 @@ class PayloadGenerator {
             payload.append(random % 20);
         }
 
-        payload.append(",\"mobileCellId\":\"");
+        payload.append(",\"mobileCellId\":");
         if (random % errorRate == 11) {
             payload.append("null");
         } else {
+            payload.append('"');
             payload.append(1000000 + random % 1000000);
+            payload.append('"');
         }
 
-        payload.append("\",\"mobileCellType\":\"");
+        payload.append(",\"mobileCellType\":");
         if (random % errorRate == 12) {
             payload.append("null");
         } else {
+            payload.append('"');
             payload.append(random % 3 + 2);
             payload.append("G");
+            payload.append('"');
         }
 
-        payload.append("\",\"mobileMNC\":");
+        payload.append(",\"mobileMNC\":");
         if (random % errorRate == 13) {
             payload.append("null");
         } else {

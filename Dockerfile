@@ -10,4 +10,4 @@ LABEL org.opencontainers.image.source=https://github.com/Joystick01/CoolerSimula
 
 WORKDIR /app
 COPY --from=build /build/target/*with-dependencies.jar app.jar
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "-Xms512m", "-Xmx7G" ,"app.jar"]
