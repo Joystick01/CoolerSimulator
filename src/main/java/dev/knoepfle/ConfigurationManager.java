@@ -10,7 +10,7 @@ public class ConfigurationManager {
 
     private final String[] parameters = {
             "ERROR_RATE",
-            "DUPPLICATE_RATE",
+            "DUPLICATE_RATE",
             "PAYLOAD_WRITER_TYPE",
             "PAYLOAD_WRITER_OFFSET",
             "CONSOLE_PAYLOAD_WRITER_LIMIT",
