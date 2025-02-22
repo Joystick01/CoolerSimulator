@@ -2,15 +2,19 @@ package dev.knoepfle.payloadwriters;
 
 import dev.knoepfle.ConfigurationManager;
 import dev.knoepfle.payloadgenerator.PayloadGeneratorStreamFactory;
+import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
 public class PayloadWriterFactory {
 
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(PayloadWriterFactory.class);
+
     ConfigurationManager configManager = ConfigurationManager.getInstance();;
     PayloadGeneratorStreamFactory payloadGeneratorStreamFactory = new PayloadGeneratorStreamFactory(configManager.getInt("PAYLOAD_WRITER_OFFSET"));
 
     public PayloadWriter getPayloadWriter() {
+        logger.info("Creating payload writer of type: {}", configManager.getString("PAYLOAD_WRITER_TYPE"));
         switch (configManager.getString("PAYLOAD_WRITER_TYPE")) {
             case "CONSOLE":
                 return new ConsolePayloadWriter(

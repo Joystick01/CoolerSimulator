@@ -68,18 +68,20 @@ class PayloadGenerator {
         payload.setLength(0);
         int oldRandom = random;
         random = randomGenerator.nextInt() & Integer.MAX_VALUE;
-        if (duplicateRate % 4 == 0) {
+        if (random % duplicateRate == 19) {
             random = oldRandom;
         } else {
             counter++;
         }
 
-        day1 = (counter / 7200000) + 1;
-        hour1 = (counter % 7200000) / 300000;
+        day1 = (counter / 7200000) + 1; // Timestamp start
+        hour1 = (counter % 7200000) / 300000; // Timestamp start
         minute1 = (counter % 300000) / 5000;
-        second1 = (counter % 5000) / 83;
+        second1 = (counter % 5000) / 84;
+
         day2 = ((counter + 300000) / 7200000) + 1;
         hour2 = ((counter + 300000) % 7200000) / 300000;
+
         day3 = day2 + 1;
 
         String id = "89011702272048" + (random % 300000 + 100000);

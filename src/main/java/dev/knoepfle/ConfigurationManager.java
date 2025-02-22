@@ -1,9 +1,13 @@
 package dev.knoepfle;
 
+import org.slf4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigurationManager {
+
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(ConfigurationManager.class);
 
     private static ConfigurationManager instance;
     private final Map<String, Object> configuration = new HashMap<>();
@@ -33,6 +37,7 @@ public class ConfigurationManager {
             configuration.put(parameter, System.getenv(parameter));
         }
         configuration.putIfAbsent("PAYLOAD_WRITER_OFFSET", "0");
+        logger.info("Configuration loaded: {}", configuration);
     }
 
     public static synchronized ConfigurationManager getInstance() {
